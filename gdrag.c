@@ -21,7 +21,22 @@ static void open_cb (GApplication *app, GFile ** files, int n_files, char *hint)
 	}
 
 	g_print ("%s\n", allFiles->str);
+
+	GtkWidget *win;
+	GtkWidget *box;
+	GtkWidget *lbl;
+
+	win = gtk_application_window_new (GTK_APPLICATION (app));
+	gtk_window_set_title (GTK_WINDOW (win), "gdrag");
+	gtk_window_set_default_size (GTK_WINDOW (win), 500,300);
+
+	box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 10);
+	gtk_window_set_child (GTK_WINDOW (win), box);
+	gtk_window_present (GTK_WINDOW (win));
+
+	lbl = gtk_label_new (allFiles->str);
 	g_free (allFiles);
+	gtk_box_append (GTK_BOX (box), lbl);
 }
 
 int main(int argc, char *argv[]) {
