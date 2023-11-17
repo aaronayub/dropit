@@ -20,12 +20,13 @@ static void open_cb (GApplication *app, GFile ** files, int n_files, char *hint)
 		free(filePath);
 	}
 
-	g_print ("%s\n", allFiles->str);
-
 	GtkWidget *win;
 	GtkWidget *box;
 	GtkWidget *lbl;
+	GtkDragSource *dsource;
+	GdkContentProvider *contentProvider;
 
+	// Set up the window, box, and label to display the drag-drop text.
 	win = gtk_application_window_new (GTK_APPLICATION (app));
 	gtk_window_set_title (GTK_WINDOW (win), "gdrag");
 	gtk_window_set_default_size (GTK_WINDOW (win), 500,300);
@@ -35,8 +36,17 @@ static void open_cb (GApplication *app, GFile ** files, int n_files, char *hint)
 	gtk_window_present (GTK_WINDOW (win));
 
 	lbl = gtk_label_new (allFiles->str);
-	g_free (allFiles);
 	gtk_box_append (GTK_BOX (box), lbl);
+
+	// Initialize a drag source from the label containing the allFiles string.
+	dsource = gtk_drag_source_new ();
+	GdkFileList* fileList = gdk_file_list_new_from_array (files, n_files);
+	contentProvider = gdk_content_provider_new_typed (GDK_TYPE_FILE_LIST, fileList);
+	g_free(allFiles);
+
+	gtk_drag_source_set_content (dsource, contentProvider);
+	g_object_unref (contentProvider);
+	gtk_widget_add_controller (GTK_WIDGET (lbl), GTK_EVENT_CONTROLLER (dsource));
 }
 
 int main(int argc, char *argv[]) {
