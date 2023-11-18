@@ -5,12 +5,10 @@ project('gdrag', 'c',
   version : '0.1',
   default_options : ['warning_level=3'])
 
-gtkdep = dependency('gtk4')
+subdir('src')
 
-gnome = import('gnome')
-resources = gnome.compile_resources('gdrag-resources','gdrag.gresource.xml')
-
-exe = executable('gdrag', 'gdrag.c',
+exe = executable('gdrag',
+  sources,
   resources,
   dependencies : gtkdep,
   install : true)
