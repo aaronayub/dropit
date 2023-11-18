@@ -1,0 +1,8 @@
+<!-- Copyright (c) 2023 Aaron Ayub
+SPDX-License-Identifier: GPL-3.0-only -->
+<?xml version="1.0" encoding="UTF-8"?>
+<gresources>
+	<gresource prefix="/com/github/AaronAyub/gdrag">
+		<file>app.ui</file>
+	</gresource>
+</gresources>

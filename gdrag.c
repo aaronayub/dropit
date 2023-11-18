@@ -9,16 +9,17 @@ static void activate_cb (GApplication *app) {
 
 static void open_cb (GApplication *app, GFile ** files, int n_files, char *hint) {
 	int validFiles = 0; // Number of files which exist
+	GtkBuilder *builder;
 	GtkWidget *win;
 	GtkWidget *box;
 
-	// Set up the window, box, and label to display the drag-drop text.
-	win = gtk_application_window_new (GTK_APPLICATION (app));
-	gtk_window_set_title (GTK_WINDOW (win), "gdrag");
-	gtk_window_set_default_size (GTK_WINDOW (win), 500,300);
+	// Read GTKWidgets from GtkBuilder ui file
+	builder = gtk_builder_new_from_resource ("/com/github/AaronAyub/gdrag/app.ui");
+	win = GTK_WIDGET (gtk_builder_get_object (builder, "win"));
+	gtk_window_set_application (GTK_WINDOW (win), GTK_APPLICATION (app));
+	box = GTK_WIDGET (gtk_builder_get_object (builder, "box"));
+	g_object_unref(builder);
 
-	box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 10);
-	gtk_window_set_child (GTK_WINDOW (win), box);
 	gtk_window_present (GTK_WINDOW (win));
 
 	for (int i = 0; i < n_files; ++i) {
