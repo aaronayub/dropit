@@ -3,6 +3,14 @@
 
 #include <gtk/gtk.h>
 
+static void action_quit (GSimpleAction *action, GVariant *parameter, gpointer app) {
+	g_application_quit (G_APPLICATION (app));
+}
+
+static GActionEntry action_entries[] = {
+	{"quit", action_quit, NULL, NULL, NULL, NULL}
+};
+
 static void activate_cb (GApplication *app) {
 	g_printerr ("Please provide one or more files to use gdrag.\n");
 }
@@ -74,6 +82,11 @@ int main(int argc, char *argv[]) {
 	app = gtk_application_new ("com.github.AaronAyub.gdrag", G_APPLICATION_HANDLES_OPEN);
 	g_signal_connect (app, "activate", G_CALLBACK (activate_cb), NULL);
 	g_signal_connect (app, "open", G_CALLBACK (open_cb), NULL);
+
+	// Set up accelerators to quit the application
+	g_action_map_add_action_entries (G_ACTION_MAP (app), action_entries, G_N_ELEMENTS (action_entries), app);
+	const char *accels[3] = {"q", "<Control>q", NULL};
+	gtk_application_set_accels_for_action (app, "app.quit", accels);
 
 	status = g_application_run (G_APPLICATION (app), argc, argv);
 	g_object_unref (app);
