@@ -1,13 +1,13 @@
 # Copyright (c) 2023 Aaron Ayub
 # SPDX-License-Identifier: GPL-3.0-only
 
-project('gdrag', 'c',
+project('dropit', 'c',
   version : '0.1',
   default_options : ['warning_level=3'])
 
 subdir('src')
 
-exe = executable('gdrag',
+exe = executable('dropit',
   sources,
   resources,
   dependencies : gtkdep,

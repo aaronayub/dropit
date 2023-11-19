@@ -1,11 +1,11 @@
-# gdrag 
+# Dropit 
 A lightweight, GTK-based drag-and-drop panel meant to be used with command-line file managers.
 
 ### Build Instructions
-To build this project, run `meson setup build && ninja -C build`. This will create the executable file 'gdrag'.
+To build this project, run `meson setup build && ninja -C build`. This will create the executable file 'dropit'.
 
 ### Usage
-After building the program, the program can be run with `./gdrag {...FILES}`, where the argument is a list of files for which the drag-and-drop panel is created.
+After building the program, the program can be run with `./dropit {...FILES}`, where the argument is a list of files for which the drag-and-drop panel is created.
 
 ### Build Requirements
 - GTK 4

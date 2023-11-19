@@ -2,7 +2,7 @@
 SPDX-License-Identifier: GPL-3.0-only -->
 <?xml version="1.0" encoding="UTF-8"?>
 <gresources>
-	<gresource prefix="/com/github/AaronAyub/gdrag">
+	<gresource prefix="/com/github/AaronAyub/dropit">
 		<file>app.ui</file>
 	</gresource>
 </gresources>

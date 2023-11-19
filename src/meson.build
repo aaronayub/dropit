@@ -4,6 +4,6 @@
 gtkdep = dependency('gtk4')
 
 gnome = import('gnome')
-resources = gnome.compile_resources('gdrag-resources','gdrag.gresource.xml')
+resources = gnome.compile_resources('dropit-resources','dropit.gresource.xml')
 
-sources = files(['gdrag.c'])
+sources = files(['dropit.c'])

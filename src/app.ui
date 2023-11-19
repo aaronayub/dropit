@@ -3,7 +3,7 @@ SPDX-License-Identifier: GPL-3.0-only -->
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
 	<object class="GtkApplicationWindow" id="win">
-		<property name="title">gdrag</property>
+		<property name="title">Dropit</property>
 		<property name="default-width">500</property>
 		<property name="default-height">300</property>
 		<child>

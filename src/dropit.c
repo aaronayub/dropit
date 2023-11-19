@@ -12,7 +12,7 @@ static GActionEntry action_entries[] = {
 };
 
 static void activate_cb (GApplication *app) {
-	g_printerr ("Please provide one or more files to use gdrag.\n");
+	g_printerr ("Please provide one or more files to use dropit.\n");
 }
 
 static void open_cb (GApplication *app, GFile ** files, int n_files, char *hint) {
@@ -22,7 +22,7 @@ static void open_cb (GApplication *app, GFile ** files, int n_files, char *hint)
 	GtkWidget *box;
 
 	// Read GTKWidgets from GtkBuilder ui file
-	builder = gtk_builder_new_from_resource ("/com/github/AaronAyub/gdrag/app.ui");
+	builder = gtk_builder_new_from_resource ("/com/github/AaronAyub/dropit/app.ui");
 	win = GTK_WIDGET (gtk_builder_get_object (builder, "win"));
 	gtk_window_set_application (GTK_WINDOW (win), GTK_APPLICATION (app));
 	box = GTK_WIDGET (gtk_builder_get_object (builder, "box"));
@@ -79,7 +79,7 @@ int main(int argc, char *argv[]) {
 	GtkApplication *app;
 	int status;
 
-	app = gtk_application_new ("com.github.AaronAyub.gdrag", G_APPLICATION_HANDLES_OPEN);
+	app = gtk_application_new ("com.github.AaronAyub.dropit", G_APPLICATION_HANDLES_OPEN);
 	g_signal_connect (app, "activate", G_CALLBACK (activate_cb), NULL);
 	g_signal_connect (app, "open", G_CALLBACK (open_cb), NULL);
 
