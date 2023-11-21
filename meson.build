@@ -3,7 +3,11 @@
 
 project('dropit', 'c',
   version : '0.1',
+  license: 'GPL-3.0-only',
   default_options : ['warning_level=3'])
+
+gtkdep = dependency('gtk4', version: '>=4.8.0')
+gnome = import('gnome')
 
 subdir('src')
 
