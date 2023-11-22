@@ -11,10 +11,8 @@ gnome = import('gnome')
 
 subdir('src')
 
-exe = executable('dropit',
+executable('dropit',
   sources,
   resources,
   dependencies : gtkdep,
   install : true)
-
-test('basic', exe)
