@@ -9,6 +9,7 @@ struct _DiAppWindow {
 	GtkApplicationWindow parent;
 
 	GtkWidget *box;
+	GtkWidget *allFilesLabel;
 };
 
 G_DEFINE_TYPE (DiAppWindow, di_app_window, GTK_TYPE_APPLICATION_WINDOW)
@@ -22,6 +23,7 @@ static void di_app_window_class_init (DiAppWindowClass *class) {
 	gtk_widget_class_set_template_from_resource (widget_class,
 			"/com/github/AaronAyub/dropit/window.ui");
 	gtk_widget_class_bind_template_child (widget_class, DiAppWindow, box);
+	gtk_widget_class_bind_template_child (widget_class, DiAppWindow, allFilesLabel);
 }
 
 DiAppWindow *di_app_window_new (GtkApplication *app) {
@@ -56,15 +58,13 @@ void di_app_window_open (DiAppWindow *win, GFile **files, int n_files) {
 	}
 
 	// Set up drag source for the all files label.
-	GtkWidget *allFilesLabel;
 	GtkDragSource *dsource;
 	GdkContentProvider *contentProvider;
 
 	char *allFilesString;
 	asprintf (&allFilesString, "All files (%d)", validFiles);
-	allFilesLabel = gtk_label_new (allFilesString);
+	gtk_label_set_text (GTK_LABEL (win->allFilesLabel), allFilesString);
 	free (allFilesString);
-	gtk_box_prepend (GTK_BOX (win->box), allFilesLabel);
 
 	// Initialize a drag source from the label containing the allFiles string.
 	dsource = gtk_drag_source_new ();
@@ -73,5 +73,5 @@ void di_app_window_open (DiAppWindow *win, GFile **files, int n_files) {
 
 	gtk_drag_source_set_content (dsource, contentProvider);
 	g_object_unref (contentProvider);
-	gtk_widget_add_controller (GTK_WIDGET (allFilesLabel), GTK_EVENT_CONTROLLER (dsource));
+	gtk_widget_add_controller (GTK_WIDGET (win->allFilesLabel), GTK_EVENT_CONTROLLER (dsource));
 }
