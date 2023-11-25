@@ -4,6 +4,7 @@
 #include <gtk/gtk.h>
 
 #include "di-app-window.h"
+#include "di-file-cell.h"
 
 struct _DiAppWindow {
 	GtkApplicationWindow parent;
@@ -35,25 +36,12 @@ void di_app_window_open (DiAppWindow *win, GFile **files, int n_files) {
 
 	for (int i = 0; i < n_files; ++i) {
 		if (g_file_query_exists (files[i], NULL)) {
+			DiFileCell *fileCell;
+
 			validFiles++;
-			
-			// Set up drag source for individual files.
-			GtkWidget *label;
-			GtkDragSource *dsource;
-			GdkContentProvider *contentProvider;
-
-			char * path = g_file_get_path (files[i]);
-			label = gtk_label_new (path);
-			free (path);
-			gtk_box_append (GTK_BOX (win->box), label);
-
-			dsource = gtk_drag_source_new ();
-			GdkFileList* fileList = gdk_file_list_new_from_array (&files[i], 1);
-			contentProvider = gdk_content_provider_new_typed (GDK_TYPE_FILE_LIST, fileList);
-
-			gtk_drag_source_set_content (dsource, contentProvider);
-			g_object_unref (contentProvider);
-			gtk_widget_add_controller (GTK_WIDGET (label), GTK_EVENT_CONTROLLER (dsource));
+			fileCell = di_file_cell_new ();
+			di_file_cell_load (fileCell, files[i]);
+			gtk_box_append (GTK_BOX (win->box), GTK_WIDGET (fileCell));
 		}
 	}
 

@@ -1,0 +1,12 @@
+<!-- Copyright (c) 2023 Aaron Ayub
+SPDX-License-Identifier: GPL-3.0-only -->
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+	<template class="DiFileCell" parent="GtkBox">
+		<property name="orientation">GTK_ORIENTATION_VERTICAL</property>
+		<property name="spacing">10</property>
+		<child>
+			<object class="GtkLabel" id="label"></object>
+		</child>
+	</template>
+</interface>

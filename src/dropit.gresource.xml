@@ -4,5 +4,6 @@ SPDX-License-Identifier: GPL-3.0-only -->
 <gresources>
 	<gresource prefix="/com/github/AaronAyub/dropit">
 		<file>window.ui</file>
+		<file>file-cell.ui</file>
 	</gresource>
 </gresources>
