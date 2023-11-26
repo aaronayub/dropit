@@ -1,17 +1,26 @@
 # Dropit 
 A lightweight, GTK-based drag-and-drop panel meant to be used with command-line file managers.
 
-### Build Instructions
-To build this project, run `meson setup build && ninja -C build`. This will create the executable file 'dropit'.
+## Installation
+To install this project, run the following.
+```shell
+meson setup build && sudo ninja -C build install
+```
 
-### Usage
-After building the program, the program can be run with `./dropit {...FILES}`, where the argument is a list of files for which the drag-and-drop panel is created.
+If you only want to build the project, but not install it on your machine, run the following.
+```
+meson setup build && ninja -C build
+```
+This will create the executable file 'dropit' in the build directory.
 
-### Build Requirements
+## Usage
+After installing the program, the program can be run with `dropit {...FILES}`, where the argument is a list of files for which the drag-and-drop panel is created.
+
+## Build Requirements
 - GTK 4
 - meson
 
-### License
+## License
 Copyright (C) 2023 Aaron Ayub
 
 This project and its source code is made available under the GNU GPL version 3.0 only.
