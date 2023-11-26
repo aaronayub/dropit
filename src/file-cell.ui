@@ -6,6 +6,11 @@ SPDX-License-Identifier: GPL-3.0-only -->
 		<property name="orientation">GTK_ORIENTATION_VERTICAL</property>
 		<property name="spacing">10</property>
 		<child>
+			<object class="GtkImage" id="image">
+				<property name="icon-size">GTK_ICON_SIZE_LARGE</property>
+			</object>>
+		</child>
+		<child>
 			<object class="GtkLabel" id="label"></object>
 		</child>
 	</template>
