@@ -6,13 +6,14 @@
 #include "di-file-cell.h"
 
 struct _DiFileCell {
-	GtkBox parent;
+	GtkGrid parent;
 
-	GtkWidget *label;
+	GtkWidget *name;
+	GtkWidget *size;
 	GtkImage *image;
 };
 
-G_DEFINE_TYPE (DiFileCell, di_file_cell, GTK_TYPE_BOX)
+G_DEFINE_TYPE (DiFileCell, di_file_cell, GTK_TYPE_GRID)
 
 static void di_file_cell_init (DiFileCell *cell) {
 	gtk_widget_init_template (GTK_WIDGET (cell));
@@ -22,7 +23,8 @@ static void di_file_cell_class_init (DiFileCellClass *class) {
 	GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (class);
 	gtk_widget_class_set_template_from_resource (widget_class,
 			"/com/github/AaronAyub/dropit/file-cell.ui");
-	gtk_widget_class_bind_template_child (widget_class, DiFileCell, label);
+	gtk_widget_class_bind_template_child (widget_class, DiFileCell, name);
+	gtk_widget_class_bind_template_child (widget_class, DiFileCell, size);
 	gtk_widget_class_bind_template_child (widget_class, DiFileCell, image);
 }
 
@@ -31,15 +33,17 @@ DiFileCell *di_file_cell_new (void) {
 }
 
 void di_file_cell_load (DiFileCell *cell, GFile *file) {
-	// Set the text on the label
-	char *fileString = g_file_get_path (file);
-	gtk_label_set_label (GTK_LABEL (cell->label), fileString);
-	free(fileString);
-
-	// Set up image
-	GFileInfo *fileInfo = g_file_query_info (file, "standard::icon", G_FILE_QUERY_INFO_NOFOLLOW_SYMLINKS, NULL, NULL);
+	// Set up image and labels
+	GFileInfo *fileInfo = g_file_query_info (file, "standard::name,standard::size,standard::icon", G_FILE_QUERY_INFO_NOFOLLOW_SYMLINKS, NULL, NULL);
 	GIcon *icon = g_file_info_get_icon (fileInfo);
+	const char *name = g_file_info_get_name (fileInfo);
+	goffset size = g_file_info_get_size (fileInfo);
+	gchar *sizeText = g_strdup_printf("%ldB", size);
 	gtk_image_set_from_gicon (cell->image, icon);
+	gtk_label_set_label (GTK_LABEL (cell->name), name);
+	gtk_label_set_label (GTK_LABEL (cell->size), sizeText);
+
+	g_free (sizeText);
 
 	// Set the drag source
 	GtkDragSource *dsource;
@@ -51,5 +55,5 @@ void di_file_cell_load (DiFileCell *cell, GFile *file) {
 
 	gtk_drag_source_set_content (dsource, contentProvider);
 	g_object_unref (contentProvider);
-	gtk_widget_add_controller (GTK_WIDGET (cell->label), GTK_EVENT_CONTROLLER (dsource));
+	gtk_widget_add_controller (GTK_WIDGET (cell), GTK_EVENT_CONTROLLER (dsource));
 }

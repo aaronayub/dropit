@@ -2,16 +2,35 @@
 SPDX-License-Identifier: GPL-3.0-only -->
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
-	<template class="DiFileCell" parent="GtkBox">
-		<property name="orientation">GTK_ORIENTATION_VERTICAL</property>
-		<property name="spacing">10</property>
+	<template class="DiFileCell" parent="GtkGrid">
+		<property name="column-spacing">10</property>
 		<child>
 			<object class="GtkImage" id="image">
+				<layout>
+					<property name="column">0</property>
+					<property name="row">0</property>
+					<property name="row-span">2</property>
+				</layout>
 				<property name="icon-size">GTK_ICON_SIZE_LARGE</property>
-			</object>>
+			</object>
 		</child>
 		<child>
-			<object class="GtkLabel" id="label"></object>
+			<object class="GtkLabel" id="name">
+				<property name="xalign">0</property>
+				<layout>
+					<property name="column">1</property>
+					<property name="row">0</property>
+				</layout>
+			</object>
+		</child>
+		<child>
+			<object class="GtkLabel" id="size">
+				<property name="xalign">0</property>
+				<layout>
+					<property name="column">1</property>
+					<property name="row">1</property>
+				</layout>
+			</object>
 		</child>
 	</template>
 </interface>
