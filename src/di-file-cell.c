@@ -5,6 +5,8 @@
 
 #include "di-file-cell.h"
 
+static char *getReadableSize (long sizeLong); 
+
 struct _DiFileCell {
 	GtkGrid parent;
 
@@ -32,18 +34,20 @@ DiFileCell *di_file_cell_new (void) {
 	return g_object_new (DI_FILE_CELL_TYPE, NULL);
 }
 
+
 void di_file_cell_load (DiFileCell *cell, GFile *file) {
 	// Set up image and labels
 	GFileInfo *fileInfo = g_file_query_info (file, "standard::name,standard::size,standard::icon", G_FILE_QUERY_INFO_NOFOLLOW_SYMLINKS, NULL, NULL);
 	GIcon *icon = g_file_info_get_icon (fileInfo);
 	const char *name = g_file_info_get_name (fileInfo);
 	goffset size = g_file_info_get_size (fileInfo);
-	gchar *sizeText = g_strdup_printf("%ldB", size);
+
+	char *sizeText = getReadableSize(size);
 	gtk_image_set_from_gicon (cell->image, icon);
 	gtk_label_set_label (GTK_LABEL (cell->name), name);
 	gtk_label_set_label (GTK_LABEL (cell->size), sizeText);
 
-	g_free (sizeText);
+	free (sizeText);
 
 	// Set the drag source
 	GtkDragSource *dsource;
@@ -56,4 +60,29 @@ void di_file_cell_load (DiFileCell *cell, GFile *file) {
 	gtk_drag_source_set_content (dsource, contentProvider);
 	g_object_unref (contentProvider);
 	gtk_widget_add_controller (GTK_WIDGET (cell), GTK_EVENT_CONTROLLER (dsource));
+}
+
+/** Create a human-readable string from a provided long representing
+ * the size of a file.*/
+static char *getReadableSize (long sizeLong) {
+	char *suffixes[] = {"B", "KiB", "MiB", "GiB", "TiB", "PiB", "EiB"};
+	int suffixIndex = 0; // Indicates which suffixes a file should be represented by
+	char *output;
+	double size = (double) sizeLong;
+
+	// Move to a larger suffix if one is available.
+	while (size > 1024) {
+		size/=1024;
+		suffixIndex++;
+	}
+
+	/* Represent the output string as a decimal if the file is measured
+	 * in KiB or greater. */
+	if (suffixIndex == 0) {
+		asprintf (&output, "%ld B", sizeLong);
+	} else {
+		asprintf (&output, "%.3lf %s", size, suffixes[suffixIndex]);
+	}
+
+	return output;
 }
