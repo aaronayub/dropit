@@ -10,3 +10,4 @@ G_DECLARE_FINAL_TYPE (DiAppWindow, di_app_window, DI, APP_WINDOW, GtkApplication
 
 DiAppWindow *di_app_window_new (GtkApplication *app);
 void di_app_window_open (DiAppWindow *win, GFile **files, int n_files);
+void drag_end_cb (void);

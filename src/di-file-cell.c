@@ -4,6 +4,7 @@
 #include <gtk/gtk.h>
 
 #include "di-file-cell.h"
+#include "di-app-window.h"
 
 static char *getReadableSize (long sizeLong); 
 
@@ -34,7 +35,6 @@ DiFileCell *di_file_cell_new (void) {
 	return g_object_new (DI_FILE_CELL_TYPE, NULL);
 }
 
-
 void di_file_cell_load (DiFileCell *cell, GFile *file) {
 	// Set up image and labels
 	GFileInfo *fileInfo = g_file_query_info (file, "standard::name,standard::size,standard::icon", G_FILE_QUERY_INFO_NOFOLLOW_SYMLINKS, NULL, NULL);
@@ -59,6 +59,7 @@ void di_file_cell_load (DiFileCell *cell, GFile *file) {
 
 	gtk_drag_source_set_content (dsource, contentProvider);
 	g_object_unref (contentProvider);
+	g_signal_connect (dsource, "drag-end", G_CALLBACK (drag_end_cb), NULL);
 	gtk_widget_add_controller (GTK_WIDGET (cell), GTK_EVENT_CONTROLLER (dsource));
 }
 

@@ -15,6 +15,24 @@ struct _DiAppWindow {
 
 G_DEFINE_TYPE (DiAppWindow, di_app_window, GTK_TYPE_APPLICATION_WINDOW)
 
+/* If allowQuit is true, drag/drop events outside the application will exit
+ * the application. */
+gboolean allowQuit = false;
+
+static void motion_enter (void) {
+	allowQuit = false;
+}
+static void motion_leave (void) {
+	allowQuit = true;
+}
+
+/** Exit the application if a drag event ends within the application window. */
+void drag_end_cb (void) {
+	if (allowQuit) {
+		exit (0);
+	}
+}
+
 static void di_app_window_init (DiAppWindow *win) {
 	gtk_widget_init_template (GTK_WIDGET (win));
 }
@@ -61,5 +79,13 @@ void di_app_window_open (DiAppWindow *win, GFile **files, int n_files) {
 
 	gtk_drag_source_set_content (dsource, contentProvider);
 	g_object_unref (contentProvider);
+	g_signal_connect (dsource, "drag-end", G_CALLBACK (drag_end_cb), NULL);
 	gtk_widget_add_controller (GTK_WIDGET (win->allFilesLabel), GTK_EVENT_CONTROLLER (dsource));
+
+	// Set up event controller for the window
+	GtkEventController *controller = gtk_drop_controller_motion_new ();
+	g_signal_connect (controller, "enter", G_CALLBACK (motion_enter), NULL);
+	g_signal_connect (controller, "leave", G_CALLBACK (motion_leave), NULL);
+	gtk_widget_add_controller (GTK_WIDGET (win->box), GTK_EVENT_CONTROLLER (controller));
 }
+
