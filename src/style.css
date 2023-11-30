@@ -1,0 +1,6 @@
+/** Copyright (c) 2023 Aaron Ayub
+SPDX-License-Identifier: GPL-3.0-only */
+
+.drag:hover {
+	opacity: 0.6;
+}

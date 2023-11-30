@@ -20,6 +20,7 @@ G_DEFINE_TYPE (DiFileCell, di_file_cell, GTK_TYPE_GRID)
 
 static void di_file_cell_init (DiFileCell *cell) {
 	gtk_widget_init_template (GTK_WIDGET (cell));
+	gtk_widget_add_css_class (GTK_WIDGET (cell), "drag");
 }
 
 static void di_file_cell_class_init (DiFileCellClass *class) {

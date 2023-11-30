@@ -35,6 +35,8 @@ void drag_end_cb (void) {
 
 static void di_app_window_init (DiAppWindow *win) {
 	gtk_widget_init_template (GTK_WIDGET (win));
+
+	gtk_widget_add_css_class (GTK_WIDGET (win->allFilesLabel), "drag");
 }
 
 static void di_app_window_class_init (DiAppWindowClass *class) {
