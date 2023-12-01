@@ -1,5 +1,3 @@
-<!-- Copyright (c) 2023 Aaron Ayub
-SPDX-License-Identifier: GPL-3.0-only -->
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
 	<template class="DiFileCell" parent="GtkGrid">

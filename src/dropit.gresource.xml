@@ -3,8 +3,8 @@ SPDX-License-Identifier: GPL-3.0-only -->
 <?xml version="1.0" encoding="UTF-8"?>
 <gresources>
 	<gresource prefix="/com/github/AaronAyub/dropit">
-		<file>window.ui</file>
-		<file>file-cell.ui</file>
-		<file>style.css</file>
+		<file preprocess="xml-stripblanks" compressed="true">window.ui</file>
+		<file preprocess="xml-stripblanks" compressed="true">file-cell.ui</file>
+		<file compressed="true">style.css</file>
 	</gresource>
 </gresources>
