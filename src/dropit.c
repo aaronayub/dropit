@@ -25,7 +25,7 @@ static void open_cb (GApplication *app, GFile ** files, int n_files, char *hint)
 	/** Set up styles */
 	display = gdk_display_get_default ();
 	provider = gtk_css_provider_new ();
-	gtk_css_provider_load_from_resource(provider, "/com/github/AaronAyub/dropit/style.css");
+	gtk_css_provider_load_from_resource(provider, "/com/github/aaronayub/dropit/style.css");
 	gtk_style_context_add_provider_for_display (display, GTK_STYLE_PROVIDER (provider), 0);
 
 	win = di_app_window_new (GTK_APPLICATION (app));
@@ -37,7 +37,7 @@ int main(int argc, char *argv[]) {
 	GtkApplication *app;
 	int status;
 
-	app = gtk_application_new ("com.github.AaronAyub.dropit", G_APPLICATION_HANDLES_OPEN);
+	app = gtk_application_new ("com.github.aaronayub.dropit", G_APPLICATION_HANDLES_OPEN);
 
 	g_signal_connect (app, "activate", G_CALLBACK (activate_cb), NULL);
 	g_signal_connect (app, "open", G_CALLBACK (open_cb), NULL);

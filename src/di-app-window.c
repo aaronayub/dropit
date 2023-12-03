@@ -42,7 +42,7 @@ static void di_app_window_init (DiAppWindow *win) {
 static void di_app_window_class_init (DiAppWindowClass *class) {
 	GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (class);
 	gtk_widget_class_set_template_from_resource (widget_class,
-			"/com/github/AaronAyub/dropit/window.ui");
+			"/com/github/aaronayub/dropit/window.ui");
 	gtk_widget_class_bind_template_child (widget_class, DiAppWindow, box);
 	gtk_widget_class_bind_template_child (widget_class, DiAppWindow, allFilesLabel);
 }

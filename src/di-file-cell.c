@@ -26,7 +26,7 @@ static void di_file_cell_init (DiFileCell *cell) {
 static void di_file_cell_class_init (DiFileCellClass *class) {
 	GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (class);
 	gtk_widget_class_set_template_from_resource (widget_class,
-			"/com/github/AaronAyub/dropit/file-cell.ui");
+			"/com/github/aaronayub/dropit/file-cell.ui");
 	gtk_widget_class_bind_template_child (widget_class, DiFileCell, name);
 	gtk_widget_class_bind_template_child (widget_class, DiFileCell, size);
 	gtk_widget_class_bind_template_child (widget_class, DiFileCell, image);
