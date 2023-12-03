@@ -9,14 +9,14 @@
 static char *getReadableSize (long sizeLong); 
 
 struct _DiFileCell {
-	GtkGrid parent;
+	GtkBox parent;
 
 	GtkWidget *name;
 	GtkWidget *size;
 	GtkImage *image;
 };
 
-G_DEFINE_TYPE (DiFileCell, di_file_cell, GTK_TYPE_GRID)
+G_DEFINE_TYPE (DiFileCell, di_file_cell, GTK_TYPE_BOX)
 
 static void di_file_cell_init (DiFileCell *cell) {
 	gtk_widget_init_template (GTK_WIDGET (cell));

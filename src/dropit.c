@@ -2,7 +2,6 @@
 // SPDX-License-Identifier: GPL-3.0-only
 
 #include <gtk/gtk.h>
-
 #include "di-app-window.h"
 
 static void action_quit (GSimpleAction *action, GVariant *parameter, gpointer app) {

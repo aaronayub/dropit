@@ -61,7 +61,7 @@ void di_app_window_open (DiAppWindow *win, GFile **files, int n_files) {
 			validFiles++;
 			fileCell = di_file_cell_new ();
 			di_file_cell_load (fileCell, files[i]);
-			gtk_box_append (GTK_BOX (win->box), GTK_WIDGET (fileCell));
+			gtk_flow_box_append (GTK_FLOW_BOX (win->box), GTK_WIDGET (fileCell));
 		}
 	}
 
