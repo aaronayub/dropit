@@ -2,6 +2,7 @@
 <interface>
 	<template class="DiAppWindow" parent="GtkApplicationWindow">
 		<property name="title">Dropit</property>
+		<property name="default-width">640</property>
 		<child>
 			<object class="GtkBox">
 				<property name="orientation">GTK_ORIENTATION_VERTICAL</property>
