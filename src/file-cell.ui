@@ -11,6 +11,7 @@
 			<object class="GtkLabel" id="name">
 				<property name="max-width-chars">16</property>
 				<property name="lines">5</property>
+				<property name="justify">GTK_JUSTIFY_CENTER</property>
 				<property name="wrap-mode">PANGO_WRAP_WORD_CHAR</property>
 				<property name="ellipsize">PANGO_ELLIPSIZE_END</property>
 				<property name="wrap">TRUE</property>
