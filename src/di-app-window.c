@@ -10,6 +10,7 @@ struct _DiAppWindow {
 	GtkApplicationWindow parent;
 
 	GtkWidget *box;
+	GtkWidget *allFilesContainer;
 	GtkWidget *allFilesLabel;
 };
 
@@ -36,7 +37,7 @@ void drag_end_cb (void) {
 static void di_app_window_init (DiAppWindow *win) {
 	gtk_widget_init_template (GTK_WIDGET (win));
 
-	gtk_widget_add_css_class (GTK_WIDGET (win->allFilesLabel), "drag");
+	gtk_widget_add_css_class (GTK_WIDGET (win->allFilesContainer), "drag");
 }
 
 static void di_app_window_class_init (DiAppWindowClass *class) {
@@ -44,6 +45,7 @@ static void di_app_window_class_init (DiAppWindowClass *class) {
 	gtk_widget_class_set_template_from_resource (widget_class,
 			"/com/github/aaronayub/dropit/window.ui");
 	gtk_widget_class_bind_template_child (widget_class, DiAppWindow, box);
+	gtk_widget_class_bind_template_child (widget_class, DiAppWindow, allFilesContainer);
 	gtk_widget_class_bind_template_child (widget_class, DiAppWindow, allFilesLabel);
 }
 
@@ -70,7 +72,7 @@ void di_app_window_open (DiAppWindow *win, GFile **files, int n_files) {
 	GdkContentProvider *contentProvider;
 
 	char *allFilesString;
-	asprintf (&allFilesString, "All files (%d)", validFiles);
+	asprintf (&allFilesString, "Drag all files\nTotal files: %d", validFiles);
 	gtk_label_set_text (GTK_LABEL (win->allFilesLabel), allFilesString);
 	free (allFilesString);
 
@@ -82,7 +84,7 @@ void di_app_window_open (DiAppWindow *win, GFile **files, int n_files) {
 	gtk_drag_source_set_content (dsource, contentProvider);
 	g_object_unref (contentProvider);
 	g_signal_connect (dsource, "drag-end", G_CALLBACK (drag_end_cb), NULL);
-	gtk_widget_add_controller (GTK_WIDGET (win->allFilesLabel), GTK_EVENT_CONTROLLER (dsource));
+	gtk_widget_add_controller (GTK_WIDGET (win->allFilesContainer), GTK_EVENT_CONTROLLER (dsource));
 
 	// Set up event controller for the window
 	GtkEventController *controller = gtk_drop_controller_motion_new ();
