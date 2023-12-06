@@ -10,6 +10,7 @@ struct _DiAppWindow {
 	GtkApplicationWindow parent;
 
 	GtkWidget *box;
+	GtkWidget *mainContainer;
 	GtkWidget *allFilesContainer;
 	GtkWidget *allFilesLabel;
 };
@@ -45,6 +46,7 @@ static void di_app_window_class_init (DiAppWindowClass *class) {
 	gtk_widget_class_set_template_from_resource (widget_class,
 			"/com/github/aaronayub/dropit/window.ui");
 	gtk_widget_class_bind_template_child (widget_class, DiAppWindow, box);
+	gtk_widget_class_bind_template_child (widget_class, DiAppWindow, mainContainer);
 	gtk_widget_class_bind_template_child (widget_class, DiAppWindow, allFilesContainer);
 	gtk_widget_class_bind_template_child (widget_class, DiAppWindow, allFilesLabel);
 }
@@ -90,6 +92,6 @@ void di_app_window_open (DiAppWindow *win, GFile **files, int n_files) {
 	GtkEventController *controller = gtk_drop_controller_motion_new ();
 	g_signal_connect (controller, "enter", G_CALLBACK (motion_enter), NULL);
 	g_signal_connect (controller, "leave", G_CALLBACK (motion_leave), NULL);
-	gtk_widget_add_controller (GTK_WIDGET (win->box), GTK_EVENT_CONTROLLER (controller));
+	gtk_widget_add_controller (GTK_WIDGET (win->mainContainer), GTK_EVENT_CONTROLLER (controller));
 }
 

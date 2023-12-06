@@ -4,15 +4,13 @@
 		<property name="title">Dropit</property>
 		<property name="default-width">640</property>
 		<child>
-			<object class="GtkBox">
+			<object class="GtkBox" id="mainContainer">
 				<property name="orientation">GTK_ORIENTATION_VERTICAL</property>
 				<property name="spacing">10</property>
 				<child>
 					<object class="GtkBox" id="allFilesContainer">
 						<property name="spacing">10</property>
-						<property name="halign">center</property>
-						<child>
-							<object class="GtkImage">
+						<property name="halign">center</property> <child> <object class="GtkImage">
 								<property name="icon-name">folder-open</property>
 								<property name="pixel-size">64</property>
 							</object>
