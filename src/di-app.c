@@ -5,6 +5,9 @@
 #include "di-app.h"
 #include "di-app-window.h"
 
+/** Global Variables */
+gboolean autoclose = FALSE; // If true, the application closes after drag-drop operations
+
 struct _DiApp {
 	GtkApplication parent;
 };
@@ -18,6 +21,15 @@ static void action_quit (GSimpleAction *action, GVariant *parameter, gpointer ap
 static GActionEntry action_entries[] = {
 	{"quit", action_quit, NULL, NULL, NULL, NULL}
 };
+
+static gint di_app_handle_local_options (GApplication *app, GVariantDict *options) {
+	if (g_variant_dict_contains (options, "autoclose")) {
+		autoclose = TRUE;
+	}
+
+	// The return value of -1 indicates that the application keeps running
+	return -1;
+}
 
 static void di_app_activate (GApplication *app) {
 	g_printerr ("Please provide one or more files to use dropit.\n");
@@ -46,11 +58,18 @@ static void di_app_open (GApplication *app, GFile ** files, int n_files, const c
 
 static void di_app_class_init (DiAppClass *class) {
 	GApplicationClass *app_class = G_APPLICATION_CLASS (class);
+	app_class->handle_local_options = di_app_handle_local_options;
 	app_class->activate = di_app_activate;
 	app_class->open = di_app_open;
 }
 
-static void di_app_init (DiApp *app) {}
+static void di_app_init (DiApp *app) {
+	// Set up command-line arguments
+	const GOptionEntry options[] = {
+		{"autoclose", 'a', G_OPTION_FLAG_NONE, G_OPTION_ARG_NONE, NULL, "Automatically close the app after a drag-drop operation.", NULL}
+	};
+	g_application_add_main_option_entries (G_APPLICATION (app), options);
+}
 
 DiApp *di_app_new (void) {
 	return g_object_new (DI_APP_TYPE, "application-id", "com.github.aaronayub.dropit", "flags", G_APPLICATION_HANDLES_OPEN, NULL);

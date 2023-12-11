@@ -15,11 +15,13 @@ struct _DiAppWindow {
 	GtkWidget *allFilesLabel;
 };
 
+/* If allowQuit and autoclose are true, drag/drop events outside the application
+ * will exit the application. */
+extern gboolean autoclose;
+gboolean allowQuit = false;
+
 G_DEFINE_TYPE (DiAppWindow, di_app_window, GTK_TYPE_APPLICATION_WINDOW)
 
-/* If allowQuit is true, drag/drop events outside the application will exit
- * the application. */
-gboolean allowQuit = false;
 
 static void motion_enter (void) {
 	allowQuit = false;
@@ -30,7 +32,7 @@ static void motion_leave (void) {
 
 /** Exit the application if a drag event ends within the application window. */
 void drag_end_cb (void) {
-	if (allowQuit) {
+	if (autoclose && allowQuit) {
 		exit (0);
 	}
 }
