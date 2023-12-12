@@ -2,6 +2,9 @@
 <interface>
 	<template class="DiFileCell" parent="GtkBox">
 		<property name="orientation">GTK_ORIENTATION_VERTICAL</property>
+		<style>
+			<class name="drag"/>
+		</style>
 		<child>
 			<object class="GtkImage" id="image">
 				<property name="pixel-size">64</property>

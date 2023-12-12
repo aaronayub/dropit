@@ -10,7 +10,12 @@
 				<child>
 					<object class="GtkBox" id="allFilesContainer">
 						<property name="spacing">10</property>
-						<property name="halign">center</property> <child> <object class="GtkImage">
+						<property name="halign">center</property>
+						<style>
+							<class name="drag"/>
+						</style>
+						<child>
+							<object class="GtkImage">
 								<property name="icon-name">folder-open</property>
 								<property name="pixel-size">64</property>
 							</object>
