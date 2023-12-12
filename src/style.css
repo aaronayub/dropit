@@ -1,6 +1,11 @@
 /** Copyright (c) 2023 Aaron Ayub
 SPDX-License-Identifier: GPL-3.0-only */
 
+.drag {
+	border: 2px dotted #888888;
+	border-radius: 5px;
+}
+
 .drag:hover {
 	opacity: 0.6;
 }
