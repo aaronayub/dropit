@@ -36,14 +36,26 @@ DiFileCell *di_file_cell_new (void) {
 }
 
 void di_file_cell_load (DiFileCell *cell, GFile *file) {
+	GdkTexture *texture;
+	GError *err = NULL;
+
 	// Set up image and labels
 	GFileInfo *fileInfo = g_file_query_info (file, "standard::name,standard::size,standard::icon", G_FILE_QUERY_INFO_NOFOLLOW_SYMLINKS, NULL, NULL);
-	GIcon *icon = g_file_info_get_icon (fileInfo);
 	const char *name = g_file_info_get_name (fileInfo);
 	goffset size = g_file_info_get_size (fileInfo);
 
+	/** If the file is an image, display a thumbnail of the image in the file cell,
+	 * otherwise use a GIcon from the filetype */
+	texture = gdk_texture_new_from_file (file, &err);
+	if (!err) {
+		gtk_image_set_from_paintable (cell->image, GDK_PAINTABLE (texture));
+	} else {
+		GIcon *icon = g_file_info_get_icon (fileInfo);
+		gtk_image_set_from_gicon (cell->image, icon);
+	}
+
 	char *sizeText = getReadableSize(size);
-	gtk_image_set_from_gicon (cell->image, icon);
+
 	gtk_label_set_label (GTK_LABEL (cell->name), name);
 	gtk_label_set_label (GTK_LABEL (cell->size), sizeText);
 
