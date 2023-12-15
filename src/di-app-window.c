@@ -13,6 +13,7 @@ struct _DiAppWindow {
 	GtkWidget *mainContainer;
 	GtkWidget *allFilesContainer;
 	GtkWidget *allFilesLabel;
+	GtkWidget *allFilesImage;
 };
 
 /* If allowQuit and autoclose are true, drag/drop events outside the application
@@ -49,6 +50,7 @@ static void di_app_window_class_init (DiAppWindowClass *class) {
 	gtk_widget_class_bind_template_child (widget_class, DiAppWindow, mainContainer);
 	gtk_widget_class_bind_template_child (widget_class, DiAppWindow, allFilesContainer);
 	gtk_widget_class_bind_template_child (widget_class, DiAppWindow, allFilesLabel);
+	gtk_widget_class_bind_template_child (widget_class, DiAppWindow, allFilesImage);
 }
 
 DiAppWindow *di_app_window_new (GtkApplication *app) {
@@ -56,6 +58,10 @@ DiAppWindow *di_app_window_new (GtkApplication *app) {
 }
 
 void di_app_window_open (DiAppWindow *win, GFile **files, int n_files) {
+	GtkIconTheme *iconTheme;
+	GtkIconPaintable *iconPaintable;
+	const char *iconName;
+
 	int validFiles = 0; // Number of files which exist
 
 	for (int i = 0; i < n_files; ++i) {
@@ -78,12 +84,23 @@ void di_app_window_open (DiAppWindow *win, GFile **files, int n_files) {
 	gtk_label_set_text (GTK_LABEL (win->allFilesLabel), allFilesString);
 	free (allFilesString);
 
+	// Set up icon for the drag source
+	iconTheme = gtk_icon_theme_get_for_display (
+		gtk_widget_get_display (GTK_WIDGET (win))
+	);
+	g_print("%d", gtk_image_get_storage_type (GTK_IMAGE (win->allFilesImage)));
+	iconName = gtk_image_get_icon_name (GTK_IMAGE (win->allFilesImage));
+	iconPaintable = gtk_icon_theme_lookup_icon (iconTheme, iconName, NULL,
+		64, 1, GTK_TEXT_DIR_NONE, 0
+	);
+
 	// Initialize a drag source from the label containing the allFiles string.
 	dsource = gtk_drag_source_new ();
 	GdkFileList* fileList = gdk_file_list_new_from_array (files, n_files);
 	contentProvider = gdk_content_provider_new_typed (GDK_TYPE_FILE_LIST, fileList);
 
 	gtk_drag_source_set_content (dsource, contentProvider);
+	gtk_drag_source_set_icon (dsource, GDK_PAINTABLE (iconPaintable), 0, 0);
 	g_object_unref (contentProvider);
 	g_signal_connect (dsource, "drag-end", G_CALLBACK (drag_end_cb), NULL);
 	gtk_widget_add_controller (GTK_WIDGET (win->allFilesContainer), GTK_EVENT_CONTROLLER (dsource));

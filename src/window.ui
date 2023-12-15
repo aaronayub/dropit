@@ -14,7 +14,7 @@
 							<class name="drag"/>
 						</style>
 						<child>
-							<object class="GtkImage">
+							<object class="GtkImage" id="allFilesImage">
 								<property name="hexpand">TRUE</property>
 								<property name="halign">GTK_ALIGN_END</property>
 								<property name="icon-name">folder-open</property>

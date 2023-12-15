@@ -36,22 +36,33 @@ DiFileCell *di_file_cell_new (void) {
 }
 
 void di_file_cell_load (DiFileCell *cell, GFile *file) {
+	GFileInfo *fileInfo;
 	GdkTexture *texture;
 	GError *err = NULL;
+	GtkIconTheme *iconTheme;
+	GtkIconPaintable *iconPaintable;
+
+	iconTheme = gtk_icon_theme_get_for_display (
+		gtk_widget_get_display (GTK_WIDGET (cell))
+	);
 
 	// Set up image and labels
-	GFileInfo *fileInfo = g_file_query_info (file, "standard::name,standard::size,standard::icon", G_FILE_QUERY_INFO_NOFOLLOW_SYMLINKS, NULL, NULL);
+	fileInfo = g_file_query_info (file, "standard::name,standard::size,standard::icon", G_FILE_QUERY_INFO_NOFOLLOW_SYMLINKS, NULL, NULL);
 	const char *name = g_file_info_get_name (fileInfo);
 	goffset size = g_file_info_get_size (fileInfo);
 
-	/** If the file is an image, display a thumbnail of the image in the file cell,
-	 * otherwise use a GIcon from the filetype */
+	/** If the file is an image, display a thumbnail of the image in the file cell
+	 * and drag-icon, otherwise use a GIcon from the filetype */
 	texture = gdk_texture_new_from_file (file, &err);
 	if (!err) {
 		gtk_image_set_from_paintable (cell->image, GDK_PAINTABLE (texture));
+		iconPaintable = gtk_icon_paintable_new_for_file (file, 64, 1);
 	} else {
 		GIcon *icon = g_file_info_get_icon (fileInfo);
 		gtk_image_set_from_gicon (cell->image, icon);
+		iconPaintable = gtk_icon_theme_lookup_by_gicon (iconTheme, icon,
+			64, 1, GTK_TEXT_DIR_NONE, 0
+		);
 	}
 
 	char *sizeText = getReadableSize(size);
@@ -70,6 +81,7 @@ void di_file_cell_load (DiFileCell *cell, GFile *file) {
 	contentProvider = gdk_content_provider_new_typed (GDK_TYPE_FILE_LIST, fileList);
 
 	gtk_drag_source_set_content (dsource, contentProvider);
+	gtk_drag_source_set_icon (dsource, GDK_PAINTABLE (iconPaintable), 0, 0);
 	g_object_unref (contentProvider);
 	g_signal_connect (dsource, "drag-end", G_CALLBACK (drag_end_cb), NULL);
 	gtk_widget_add_controller (GTK_WIDGET (cell), GTK_EVENT_CONTROLLER (dsource));
