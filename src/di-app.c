@@ -66,7 +66,9 @@ static void di_app_class_init (DiAppClass *class) {
 static void di_app_init (DiApp *app) {
 	// Set up command-line arguments
 	const GOptionEntry options[] = {
-		{"autoclose", 'a', G_OPTION_FLAG_NONE, G_OPTION_ARG_NONE, NULL, "Automatically close the app after a drag-drop operation.", NULL}
+		{"autoclose", 'a', G_OPTION_FLAG_NONE, G_OPTION_ARG_NONE, NULL,
+			"Automatically close the app after a drag-drop operation.", NULL},
+		{NULL}
 	};
 	g_application_add_main_option_entries (G_APPLICATION (app), options);
 }
