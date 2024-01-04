@@ -3,8 +3,9 @@ A lightweight, GTK-based drag-and-drop panel meant to be used with command-line 
 
 ## Installation
 To install this project, run the following.
-```shell
-meson setup build && sudo ninja -C build install
+```
+meson setup build
+sudo ninja -C build install
 ```
 
 If you only want to build the project, but not install it on your machine, run the following.
@@ -14,10 +15,10 @@ meson setup build && ninja -C build
 This will create the executable file 'dropit' in the build directory.
 
 ## Usage
-After installing the program, the program can be run with `dropit {...FILES}`, where the argument is a list of files for which the drag-and-drop panel is created.
+After installing the program, the program can be run with `dropit {...FILES}`, where the argument is a list of files for which the drag-and-drop panel is created. You may provide the command line option "-a" or "--autoclose" to automatically close the application after a drag-drop operation.
 
 ## Build Requirements
-- GTK 4
+- GTK >= 4.8.0
 - meson
 
 ## License
