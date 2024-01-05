@@ -1,0 +1,34 @@
+name: build release
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  release:
+    runs-on: ubuntu-rolling
+    permissions:
+      contents: write
+    steps:
+    - uses: actions/checkout@v3
+    - name: Install build dependencies
+      run: sudo apt-get install -y libgtk-4-dev meson zip
+    - name: setup build
+      run: meson setup build
+    - name: build
+      run: ninja -C build
+    - name: package
+      run: zip dropit.zip README.md COPYING build/dropit
+    - uses: actions/github-script@v6
+      env: 
+        RELEASE_ID: ${{github.event.release.id}}
+      with:
+        script: |
+          const fs = require('fs');
+          await github.rest.repos.uploadReleaseAsset({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            release_id: process.env.RELEASE_ID,
+            name: "dropit_" + process.env.GITHUB_REF_NAME + "_linux64bit.zip",
+            data: fs.readFileSync("dropit.zip")
+          });
