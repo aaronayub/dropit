@@ -1,6 +1,8 @@
 // Copyright (c) 2023 Aaron Ayub
 // SPDX-License-Identifier: GPL-3.0-only
 
+/** Dropit GtkApplication, managing the program's lifecycle */
+
 #pragma once
 
 #include <gtk/gtk.h>

@@ -1,6 +1,8 @@
 // Copyright (c) 2023 Aaron Ayub
 // SPDX-License-Identifier: GPL-3.0-only
 
+/** Dropit GtkApplication, managing the program's lifecycle */
+
 #include <gtk/gtk.h>
 #include "di-app.h"
 #include "di-app-window.h"
@@ -31,11 +33,13 @@ static gint di_app_handle_local_options (GApplication *app, GVariantDict *option
 	return -1;
 }
 
+/** Provide users with an error message if the app is opened with no files */
 static void di_app_activate (GApplication *app) {
 	g_printerr ("Please provide one or more files to use dropit.\n");
 }
 
-static void di_app_open (GApplication *app, GFile ** files, int n_files, const char *hint) {
+/** Sets up the application interface with the provided files */
+static void di_app_open (GApplication *app, GFile **files, int n_files, const char *hint) {
 	DiAppWindow *win;
 	GtkCssProvider *provider;
 	GdkDisplay *display;

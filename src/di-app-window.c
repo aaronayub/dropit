@@ -1,6 +1,8 @@
 // Copyright (c) 2023 Aaron Ayub
 // SPDX-License-Identifier: GPL-3.0-only
 
+/** App window object: The window and main user interface for the program */
+
 #include <gtk/gtk.h>
 
 #include "di-app-window.h"
@@ -57,6 +59,7 @@ DiAppWindow *di_app_window_new (GtkApplication *app) {
 	return g_object_new (DI_APP_WINDOW_TYPE, "application", app, NULL);
 }
 
+/** Set up the window by loading all valid files */
 void di_app_window_open (DiAppWindow *win, GFile **files, int n_files) {
 	GtkIconTheme *iconTheme;
 	GtkIconPaintable *iconPaintable;
