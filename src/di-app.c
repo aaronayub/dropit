@@ -21,7 +21,7 @@ static void action_quit (GSimpleAction *action, GVariant *parameter, gpointer ap
 }
 
 static GActionEntry action_entries[] = {
-	{"quit", action_quit, NULL, NULL, NULL, NULL}
+	{ .name = "quit", .activate = action_quit}
 };
 
 static gint di_app_handle_local_options (GApplication *app, GVariantDict *options) {
