@@ -47,7 +47,7 @@ static void di_app_open (GApplication *app, GFile **files, int n_files, const ch
 	// Set up accelerators to quit the application
 	g_action_map_add_action_entries (G_ACTION_MAP (app), action_entries, G_N_ELEMENTS (action_entries), app);
 	const char *accels[3] = {"q", "<Control>q", NULL};
-	gtk_application_set_accels_for_action (app, "app.quit", accels);
+	gtk_application_set_accels_for_action (GTK_APPLICATION (app), "app.quit", accels);
 
 	/** Set up styles */
 	display = gdk_display_get_default ();
