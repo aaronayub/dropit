@@ -91,7 +91,6 @@ void di_app_window_open (DiAppWindow *win, GFile **files, int n_files) {
 	iconTheme = gtk_icon_theme_get_for_display (
 		gtk_widget_get_display (GTK_WIDGET (win))
 	);
-	g_print("%d", gtk_image_get_storage_type (GTK_IMAGE (win->allFilesImage)));
 	iconName = gtk_image_get_icon_name (GTK_IMAGE (win->allFilesImage));
 	iconPaintable = gtk_icon_theme_lookup_icon (iconTheme, iconName, NULL,
 		64, 1, GTK_TEXT_DIR_NONE, 0
