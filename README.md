@@ -22,7 +22,7 @@ After installing the program, the program can be run with `dropit {...FILES}`, w
 - meson
 
 ## License
-Copyright (C) 2023 Aaron Ayub
+Copyright (C) 2023-2024 Aaron Ayub
 
 This project and its source code is made available under the GNU GPL version 3.0 only.
 
