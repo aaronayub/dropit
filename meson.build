@@ -2,7 +2,7 @@
 # SPDX-License-Identifier: GPL-3.0-only
 
 project('dropit', 'c',
-  version : '0.3',
+  version : '1.0.0',
   license: 'GPL-3.0-only',
   default_options : ['warning_level=3'])
 
