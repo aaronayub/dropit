@@ -14,13 +14,15 @@ jobs:
     - name: Install build dependencies
       run: |
         apt-get update
-        apt-get install -y meson libgtk-4-dev zip
+        apt-get install -y meson libgtk-4-dev
     - name: meson setup
       run: meson setup build
     - name: build
       run: ninja -C build
     - name: package
-      run: zip dropit.zip README.md COPYING build/dropit
+      run: |
+        mv build/dropit dropit
+        tar -czf dropit.tar.gz README.md COPYING dropit
     - uses: actions/github-script@v7
       env:
         RELEASE_ID: ${{github.event.release.id}}
@@ -31,6 +33,6 @@ jobs:
             owner: context.repo.owner,
             repo: context.repo.repo,
             release_id: process.env.RELEASE_ID,
-            name: "dropit_" + process.env.GITHUB_REF_NAME + "_linux64bit.zip",
-            data: fs.readFileSync("dropit.zip")
+            name: "dropit_" + process.env.GITHUB_REF_NAME + "_linux64bit.tar.gz",
+            data: fs.readFileSync("dropit.tar.gz")
           });
