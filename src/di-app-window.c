@@ -16,27 +16,27 @@ struct _DiAppWindow {
 	GtkWidget *allFilesContainer;
 	GtkWidget *allFilesLabel;
 	GtkWidget *allFilesImage;
+  gboolean allowQuit;
+  gboolean autoclose;
 };
-
-/* If allowQuit and autoclose are true, drag/drop events outside the application
- * will exit the application. */
-extern gboolean autoclose;
-gboolean allowQuit = false;
 
 G_DEFINE_TYPE (DiAppWindow, di_app_window, GTK_TYPE_APPLICATION_WINDOW)
 
-
-static void motion_enter (void) {
-	allowQuit = false;
+static void motion_enter (GtkEventControllerMotion *self, gdouble x, gdouble y, gpointer user_data) {
+  DiAppWindow *win = DI_APP_WINDOW (user_data);
+	win->allowQuit = FALSE;
 }
-static void motion_leave (void) {
-	allowQuit = true;
+static void motion_leave (GtkEventControllerMotion *self, gdouble x, gdouble y, gpointer user_data) {
+  DiAppWindow *win = DI_APP_WINDOW (user_data);
+	win->allowQuit = TRUE;
 }
 
-/** Exit the application if a drag event ends within the application window. */
-void drag_end_cb (void) {
-	if (autoclose && allowQuit) {
-		exit (0);
+/** Exit the application if a drag event ends within the application window
+ * and the user has the autoclose option set. */
+void drag_end_cb (GtkDragSource *self, GdkDrag *drag, gboolean delete_data, gpointer user_data) {
+  DiAppWindow *win = DI_APP_WINDOW (user_data);
+	if (win->autoclose && win->allowQuit) {
+    gtk_window_close (GTK_WINDOW (win));
 	}
 }
 
@@ -60,10 +60,11 @@ DiAppWindow *di_app_window_new (GtkApplication *app) {
 }
 
 /** Set up the window by loading all valid files */
-void di_app_window_open (DiAppWindow *win, GFile **files, int n_files) {
+void di_app_window_open (DiAppWindow *win, gboolean autoclose, GFile **files, int n_files) {
 	GtkIconTheme *iconTheme;
 	GtkIconPaintable *iconPaintable;
 	const char *iconName;
+  win->autoclose = autoclose;
 
 	int validFiles = 0; // Number of files which exist
 
@@ -73,7 +74,7 @@ void di_app_window_open (DiAppWindow *win, GFile **files, int n_files) {
 
 			validFiles++;
 			fileCell = di_file_cell_new ();
-			di_file_cell_load (fileCell, files[i]);
+			di_file_cell_load (fileCell, files[i], win);
 			gtk_flow_box_append (GTK_FLOW_BOX (win->box), GTK_WIDGET (fileCell));
 		}
 	}
@@ -104,13 +105,13 @@ void di_app_window_open (DiAppWindow *win, GFile **files, int n_files) {
 	gtk_drag_source_set_content (dsource, contentProvider);
 	gtk_drag_source_set_icon (dsource, GDK_PAINTABLE (iconPaintable), 0, 0);
 	g_object_unref (contentProvider);
-	g_signal_connect (dsource, "drag-end", G_CALLBACK (drag_end_cb), NULL);
+	g_signal_connect (dsource, "drag-end", G_CALLBACK (drag_end_cb), win);
 	gtk_widget_add_controller (GTK_WIDGET (win->allFilesContainer), GTK_EVENT_CONTROLLER (dsource));
 
 	// Set up event controller for the window
 	GtkEventController *controller = gtk_drop_controller_motion_new ();
-	g_signal_connect (controller, "enter", G_CALLBACK (motion_enter), NULL);
-	g_signal_connect (controller, "leave", G_CALLBACK (motion_leave), NULL);
+	g_signal_connect (controller, "enter", G_CALLBACK (motion_enter), win);
+	g_signal_connect (controller, "leave", G_CALLBACK (motion_leave), win);
 	gtk_widget_add_controller (GTK_WIDGET (win->mainContainer), GTK_EVENT_CONTROLLER (controller));
 }
 

@@ -7,11 +7,9 @@
 #include "di-app.h"
 #include "di-app-window.h"
 
-/** Global Variables */
-gboolean autoclose = FALSE; // If true, the application closes after drag-drop operations
-
 struct _DiApp {
 	GtkApplication parent;
+  gboolean autoclose; // If true, the application closes after drag-drop operations
 };
 
 G_DEFINE_TYPE (DiApp, di_app, GTK_TYPE_APPLICATION)
@@ -25,9 +23,8 @@ static GActionEntry action_entries[] = {
 };
 
 static gint di_app_handle_local_options (GApplication *app, GVariantDict *options) {
-	if (g_variant_dict_contains (options, "autoclose")) {
-		autoclose = TRUE;
-	}
+  DiApp *di_app = DI_APP (app);
+  di_app->autoclose = g_variant_dict_contains (options, "autoclose");
 
 	// The return value of -1 indicates that the application keeps running
 	return -1;
@@ -56,7 +53,7 @@ static void di_app_open (GApplication *app, GFile **files, int n_files, const ch
 	gtk_style_context_add_provider_for_display (display, GTK_STYLE_PROVIDER (provider), 0);
 
 	win = di_app_window_new (GTK_APPLICATION (app));
-	di_app_window_open (win, files, n_files);
+	di_app_window_open (win, DI_APP (app)->autoclose, files, n_files);
 	gtk_window_present (GTK_WINDOW (win));
 }
 

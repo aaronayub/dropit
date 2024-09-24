@@ -39,7 +39,7 @@ DiFileCell *di_file_cell_new (void) {
 }
 
 /** Set up the file cell by loading information about the file it represents. */
-void di_file_cell_load (DiFileCell *cell, GFile *file) {
+void di_file_cell_load (DiFileCell *cell, GFile *file, DiAppWindow *win) {
 	GFileInfo *fileInfo;
 	GdkTexture *texture;
 	GError *err = NULL;
@@ -87,7 +87,7 @@ void di_file_cell_load (DiFileCell *cell, GFile *file) {
 	gtk_drag_source_set_content (dsource, contentProvider);
 	gtk_drag_source_set_icon (dsource, GDK_PAINTABLE (iconPaintable), 0, 0);
 	g_object_unref (contentProvider);
-	g_signal_connect (dsource, "drag-end", G_CALLBACK (drag_end_cb), NULL);
+	g_signal_connect (dsource, "drag-end", G_CALLBACK (drag_end_cb), win);
 	gtk_widget_add_controller (GTK_WIDGET (cell), GTK_EVENT_CONTROLLER (dsource));
 }
 
